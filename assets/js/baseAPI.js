@@ -22,6 +22,7 @@ $.ajaxPrefilter(function(options){
             //跳转到登录页面
             location.href = '/login.html'
         }
+        
      }
     
 })
