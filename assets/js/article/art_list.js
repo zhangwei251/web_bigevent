@@ -84,8 +84,8 @@ $(function() {
     // 根据最新的筛选条件，重新渲染表格的数据
     initTable()
   })
+
   function renderPage(total){
- 
     laypage.render({
     elem: 'pageBox', //注意，这里的 test1 是 ID，不用加 # 号
     count: total, //数据总数，从服务端得到
@@ -104,7 +104,7 @@ $(function() {
       //如果first的值为true 是方式一处罚的否则是方式2
       // console.log(first);
       // console.log(obj.curr);
-      console.log(obj.limit);
+      // console.log(obj.limit);
        //将做新的页码值赋值到q对象中再调用initTable函数渲染页面
       q.pagenum = obj.curr;
       //把最新的条目数赋值到q 这个查询参数对象的pageSize属性中
@@ -118,4 +118,34 @@ $(function() {
     })
   }
 
+  // 通过代理的形式，为删除按钮绑定点击事件
+  $('tbody').on('click','.btn-delete', function() {
+    //获取删除按钮的的个数
+    var len = $('.btn-delete').length;
+    //获取文章的id
+    var id = $(this).attr('data-id')
+    // 提示用户是否要删除
+    layer.confirm('确认删除?', { icon: 3, title: '提示' }, function(index) {
+      $.ajax({
+        method: 'GET',
+        url: '/my/article/delete/' + id,
+        success: function(res) {
+          console.log(res);
+          if (res.status !== 0) {
+            return layer.msg('删除文章失败！')
+          }
+          layer.msg('删除文章成功！')
+          //当数据删除完成后，需要判断当前这一页中，是否还有剩余的数据
+          //如果没有剩余数据了，则让页码-1后再重新调用 initTable()方法渲染数据
+          layer.close(index)
+          if(len === 1){
+            //如果len的值等等于1，则证明删除完毕后，页面再也没有任何数据了
+            //页码值最小必须是1
+            q.pagenum = q.pagenum === 1 ? 1 : q.pagenum - 1;
+          }
+          initTable()
+        }
+      })
+    })
+  })
 })

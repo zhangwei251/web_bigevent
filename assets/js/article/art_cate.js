@@ -86,23 +86,5 @@ $(function() {
     })
   })
 
-  // 通过代理的形式，为删除按钮绑定点击事件
-  $('tbody').on('click', '.btn-delete', function() {
-    var id = $(this).attr('data-id')
-    // 提示用户是否要删除
-    layer.confirm('确认删除?', { icon: 3, title: '提示' }, function(index) {
-      $.ajax({
-        method: 'GET',
-        url: '/my/article/deletecate/' + id,
-        success: function(res) {
-          if (res.status !== 0) {
-            return layer.msg('删除分类失败！')
-          }
-          layer.msg('删除分类成功！')
-          layer.close(index)
-          initArtCateList()
-        }
-      })
-    })
-  })
+
 })
