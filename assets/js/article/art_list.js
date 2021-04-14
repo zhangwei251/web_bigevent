@@ -148,4 +148,17 @@ $(function() {
       })
     })
   })
+
+
+  getEdit()
+function getEdit(){
+  $('tbody').on('click','#edit',function(){
+    location.href = '/article/art_edit.html?id=' + $(this).attr('data-id');
+    console.log(location.href);
+   
+  })
+
+}
+ 
+
 })
